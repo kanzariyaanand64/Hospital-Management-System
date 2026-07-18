@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const Doctors = () => {
   const [doctors, setDoctors] = useState([]);
@@ -20,7 +20,7 @@ const Doctors = () => {
   const fetchDoctors = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:8080/api/doctors');
+      const res = await api.get('/api/doctors');
       setDoctors(res.data);
       setLoading(false);
     } catch (error) {
@@ -62,7 +62,7 @@ const Doctors = () => {
   const handleDeleteDoctor = async (id) => {
     if (window.confirm("Are you sure you want to delete this doctor record?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/doctors/${id}`);
+        await api.delete(`/api/doctors/${id}`);
         fetchDoctors();
       } catch (error) {
         alert("Failed to delete doctor. Ensure they have no scheduled appointments.");
@@ -83,9 +83,9 @@ const Doctors = () => {
     e.preventDefault();
     try {
       if (isEdit) {
-        await axios.put(`http://localhost:8080/api/doctors/${formData.id}`, formData);
+        await api.put(`/api/doctors/${formData.id}`, formData);
       } else {
-        await axios.post('http://localhost:8080/api/doctors', formData);
+        await api.post('/api/doctors', formData);
       }
       setShowModal(false);
       fetchDoctors();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -15,9 +15,9 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         const [patientsRes, doctorsRes, appointmentsRes] = await Promise.all([
-          axios.get('http://localhost:8080/api/patients'),
-          axios.get('http://localhost:8080/api/doctors'),
-          axios.get('http://localhost:8080/api/appointments')
+          api.get('/api/patients'),
+          api.get('/api/doctors'),
+          api.get('/api/appointments')
         ]);
 
         const appts = appointmentsRes.data;

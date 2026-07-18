@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const DoctorPanel = () => {
   const [doctors, setDoctors] = useState([]);
@@ -19,7 +19,7 @@ const DoctorPanel = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/doctors');
+        const res = await api.get('/api/doctors');
         setDoctors(res.data);
         if (res.data.length > 0) {
           setSelectedDoctorId(res.data[0].id.toString());
@@ -38,7 +38,7 @@ const DoctorPanel = () => {
     const fetchDoctorAppointments = async () => {
       try {
         setLoading(true);
-        const res = await axios.get('http://localhost:8080/api/appointments');
+        const res = await api.get('/api/appointments');
         // Filter appointments for the selected doctor
         const filtered = res.data.filter(
           appt => appt.doctor && appt.doctor.id.toString() === selectedDoctorId
@@ -92,10 +92,10 @@ const DoctorPanel = () => {
         doctorRemarks: statusForm.doctorRemarks
       };
 
-      await axios.put(`http://localhost:8080/api/appointments/${selectedAppt.id}`, payload);
+      await api.put(`/api/appointments/${selectedAppt.id}`, payload);
       
       // Refresh local list
-      const res = await axios.get('http://localhost:8080/api/appointments');
+      const res = await api.get('/api/appointments');
       const filtered = res.data.filter(
         appt => appt.doctor && appt.doctor.id.toString() === selectedDoctorId
       );

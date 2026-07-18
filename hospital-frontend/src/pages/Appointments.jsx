@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -24,9 +24,9 @@ const Appointments = () => {
     try {
       setLoading(true);
       const [apptsRes, patientsRes, doctorsRes] = await Promise.all([
-        axios.get('http://localhost:8080/api/appointments'),
-        axios.get('http://localhost:8080/api/patients'),
-        axios.get('http://localhost:8080/api/doctors')
+        api.get('/api/appointments'),
+        api.get('/api/patients'),
+        api.get('/api/doctors')
       ]);
       setAppointments(apptsRes.data);
       setPatients(patientsRes.data);
@@ -75,7 +75,7 @@ const Appointments = () => {
   const handleDeleteAppointment = async (id) => {
     if (window.confirm("Are you sure you want to cancel/delete this appointment?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/appointments/${id}`);
+        await api.delete(`/api/appointments/${id}`);
         fetchData();
       } catch (error) {
         console.error("Error deleting appointment", error);
@@ -114,9 +114,9 @@ const Appointments = () => {
 
     try {
       if (isEdit) {
-        await axios.put(`http://localhost:8080/api/appointments/${formData.id}`, payload);
+        await api.put(`/api/appointments/${formData.id}`, payload);
       } else {
-        await axios.post('http://localhost:8080/api/appointments', payload);
+        await api.post('/api/appointments', payload);
       }
       setShowModal(false);
       fetchData();
